@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ExternalLink } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import ProductGallery from "@/components/ProductGallery";
@@ -54,6 +55,18 @@ export default async function ProductPage(
           </p>
 
           <ProductPurchasePanel slug={product.slug} variants={product.variants} />
+
+          {product.amazonUrl && (
+            <a
+              href={product.amazonUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 inline-flex items-center gap-2 rounded-full border border-border px-5 py-2.5 text-sm font-bold text-ink-soft transition hover:border-coral hover:text-coral"
+            >
+              <ExternalLink className="h-4 w-4" />
+              Available on Amazon
+            </a>
+          )}
         </div>
       </div>
     </div>

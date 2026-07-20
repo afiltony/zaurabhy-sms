@@ -19,7 +19,10 @@ export type Product = {
   /** Up to 3 gallery photos for the product detail page. */
   images: (string | null)[];
   variants: ProductVariant[];
+  amazonUrl?: string;
 };
+
+const AMAZON_URL = "https://link.amazon/B010Gv0Aj";
 
 const RICE_PRICE_PER_KG = 120;
 // 3% off the linear price for every kg above 1kg (e.g. a 4kg pack gets 9% off).
@@ -70,8 +73,9 @@ export const PRODUCTS: Product[] = [
       "Grown on our own farms in Kerala, this raw rice is minimally polished to retain its natural bran and fiber. A daily staple with a satisfying bite, perfect for everyday meals.",
     caption: "high fiber raw rice — pack + grains",
     image: "/products/raw-rice.jpg",
-    images: ["/products/raw-rice.jpg", null, null],
+    images: ["/products/raw-rice.jpg", "/products/raw-rice-loose.jpg", null],
     variants: RICE_VARIANTS,
+    amazonUrl: AMAZON_URL,
   },
   {
     slug: "dosa-rice",
@@ -81,8 +85,13 @@ export const PRODUCTS: Product[] = [
       "Specially selected for its starch content and grind quality, our dosa rice delivers crispy, golden dosas every time — a South Indian breakfast essential.",
     caption: "dosa rice",
     image: "/products/2-kg-dosa-rice.jpg",
-    images: ["/products/2-kg-dosa-rice.jpg", null, null],
+    images: [
+      "/products/2-kg-dosa-rice.jpg",
+      "/products/raw-rice-loose.jpg",
+      "/products/prpration-dosa-rice.jpg",
+    ],
     variants: RICE_VARIANTS,
+    amazonUrl: AMAZON_URL,
   },
   {
     slug: "appam-rice",
@@ -92,8 +101,9 @@ export const PRODUCTS: Product[] = [
       "Sourced from traditional Kerala paddy varieties, this appam rice ferments beautifully for lacy-edged, soft-centered appams.",
     caption: "appam rice",
     image: "/products/2-kg-appam-rice.jpg",
-    images: ["/products/2-kg-appam-rice.jpg", null, null],
+    images: ["/products/2-kg-appam-rice.jpg", "/products/raw-rice-loose.jpg", null],
     variants: RICE_VARIANTS,
+    amazonUrl: AMAZON_URL,
   },
   {
     slug: "idli-rice",
@@ -103,8 +113,9 @@ export const PRODUCTS: Product[] = [
       "A parboiled rice variety chosen for consistent fermentation, giving you soft, fluffy idlis on every batch.",
     caption: "idli rice",
     image: "/products/2-kg-idli-rice.jpg",
-    images: ["/products/2-kg-idli-rice.jpg", null, null],
+    images: ["/products/2-kg-idli-rice.jpg", "/products/raw-rice-loose.jpg", null],
     variants: RICE_VARIANTS,
+    amazonUrl: AMAZON_URL,
   },
   {
     slug: "malabar-tamarind",
@@ -115,7 +126,12 @@ export const PRODUCTS: Product[] = [
       "Also known as kudampuli or gambooge, our Malabar tamarind is hand-picked and naturally sun-dried on our own farms, giving Kerala fish curry its signature tang.",
     caption: "malabar tamarind — sun-dried kudampuli",
     image: "/products/kudam-puli.jpg",
-    images: ["/products/kudam-puli.jpg", null, null],
+    images: [
+      "/products/kudam-puli.jpg",
+      "/products/malabar-tamarind-high-oil-content.jpg",
+      "/products/malabar-tamarind-specs.jpg",
+    ],
+    amazonUrl: AMAZON_URL,
     variants: [
       {
         id: "500g",

@@ -7,6 +7,7 @@ import EnquiryForms from "@/components/EnquiryForms";
 import HealthBenefits from "@/components/HealthBenefits";
 import ProcessSteps from "@/components/ProcessSteps";
 import Testimonials from "@/components/Testimonials";
+import BlogPreview from "@/components/BlogPreview";
 import DealerCta from "@/components/DealerCta";
 
 export default function Home() {
@@ -21,6 +22,7 @@ export default function Home() {
       <HealthBenefits />
       <ProcessSteps />
       <Testimonials />
+      <BlogPreview />
       <DealerCta />
     </>
   );

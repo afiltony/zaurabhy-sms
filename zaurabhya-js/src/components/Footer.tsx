@@ -5,6 +5,7 @@ const EXPLORE_LINKS = [
   { label: "About", href: "/" },
   { label: "Products", href: "/#products" },
   { label: "Our Farms", href: "/#farms" },
+  { label: "Blog", href: "/blog" },
   { label: "Amazon", href: "#" },
 ];
 

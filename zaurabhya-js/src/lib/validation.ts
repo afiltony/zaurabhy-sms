@@ -8,6 +8,11 @@ export const monthlyRequirementOptions = [
   "5 Tons",
 ] as const;
 
+export const deliveryPreferenceOptions = [
+  "Own Transport",
+  "Parcel Service",
+] as const;
+
 export const wholesaleEnquirySchema = z.object({
   businessName: z.string().trim().min(2, "Business name is required"),
   phone: z
@@ -20,6 +25,9 @@ export const wholesaleEnquirySchema = z.object({
   state: z.string().trim().min(2, "State is required"),
   monthlyRequirement: z.enum(monthlyRequirementOptions, {
     message: "Select your monthly requirement",
+  }),
+  deliveryPreference: z.enum(deliveryPreferenceOptions, {
+    message: "Select a delivery preference",
   }),
   agreeToTerms: z.literal(true, {
     message: "You must agree to the Terms of Use",

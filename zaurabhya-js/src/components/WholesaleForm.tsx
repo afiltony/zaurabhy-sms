@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { CheckCircle2 } from "lucide-react";
 import TextField from "@/components/forms/TextField";
 import {
+  deliveryPreferenceOptions,
   monthlyRequirementOptions,
   wholesaleEnquirySchema,
   type WholesaleEnquiryInput,
@@ -100,6 +101,33 @@ export default function WholesaleForm() {
           {errors.monthlyRequirement && (
             <p className="mt-1 text-xs text-coral">
               {errors.monthlyRequirement.message}
+            </p>
+          )}
+        </fieldset>
+
+        <fieldset>
+          <legend className="mb-2 block text-xs font-semibold text-ink-soft">
+            Delivery preference
+          </legend>
+          <div className="flex flex-wrap gap-2">
+            {deliveryPreferenceOptions.map((option) => (
+              <label
+                key={option}
+                className="cursor-pointer rounded-full border border-border px-3.5 py-1.5 text-[13px] font-semibold text-ink-soft transition has-[:checked]:border-teal has-[:checked]:bg-teal has-[:checked]:text-teal-foreground"
+              >
+                <input
+                  type="radio"
+                  value={option}
+                  {...register("deliveryPreference")}
+                  className="sr-only"
+                />
+                {option}
+              </label>
+            ))}
+          </div>
+          {errors.deliveryPreference && (
+            <p className="mt-1 text-xs text-coral">
+              {errors.deliveryPreference.message}
             </p>
           )}
         </fieldset>
