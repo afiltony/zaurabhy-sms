@@ -11,6 +11,7 @@ export async function POST(request: Request) {
   const parsed = checkoutSchema.safeParse(body);
 
   if (!parsed.success) {
+    console.error("Checkout validation failed:", JSON.stringify(parsed.error.issues));
     return NextResponse.json(
       { error: "Invalid submission", issues: parsed.error.issues },
       { status: 400 },
@@ -66,11 +67,20 @@ export async function POST(request: Request) {
   }
 
   const razorpay = getRazorpayClient();
-  const razorpayOrder = await razorpay.orders.create({
-    amount: amount * 100,
-    currency: "INR",
-    receipt: orderId,
-  });
+  let razorpayOrder;
+  try {
+    razorpayOrder = await razorpay.orders.create({
+      amount: amount * 100,
+      currency: "INR",
+      receipt: orderId,
+    });
+  } catch (err) {
+    console.error("Razorpay order creation failed:", err);
+    return NextResponse.json(
+      { error: "Could not reach the payment gateway. Please try again." },
+      { status: 502 },
+    );
+  }
 
   await createOrder({
     id: orderId,

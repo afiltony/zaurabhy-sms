@@ -21,11 +21,28 @@ const EMPTY_ITEMS: CartItem[] = [];
 let items: CartItem[] = EMPTY_ITEMS;
 const listeners = new Set<() => void>();
 
+function isValidCartItem(value: unknown): value is CartItem {
+  if (!value || typeof value !== "object") return false;
+  const item = value as Record<string, unknown>;
+  return (
+    typeof item.slug === "string" &&
+    item.slug.length > 0 &&
+    typeof item.variantId === "string" &&
+    item.variantId.length > 0 &&
+    typeof item.quantity === "number" &&
+    Number.isInteger(item.quantity) &&
+    item.quantity >= 1
+  );
+}
+
 function readFromStorage(): CartItem[] {
   if (typeof window === "undefined") return EMPTY_ITEMS;
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : EMPTY_ITEMS;
+    if (!raw) return EMPTY_ITEMS;
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return EMPTY_ITEMS;
+    return parsed.filter(isValidCartItem);
   } catch {
     return EMPTY_ITEMS;
   }

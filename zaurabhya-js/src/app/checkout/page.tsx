@@ -18,7 +18,6 @@ type FormInput = Omit<CheckoutInput, "items">;
 export default function CheckoutPage() {
   const { items, subtotal, clear } = useCart();
   const router = useRouter();
-  const [scriptReady, setScriptReady] = useState(false);
   const [status, setStatus] = useState<"idle" | "submitting" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -48,10 +47,17 @@ export default function CheckoutPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...shipping, items }),
       });
-      const createData = await createRes.json();
+      const createData = await createRes.json().catch(() => null);
+
+      if (!createData) {
+        throw new Error("Something went wrong starting checkout. Please try again.");
+      }
 
       if (!createRes.ok) {
-        throw new Error(createData.error ?? "Could not start checkout");
+        const detail = createData.issues?.[0]?.message;
+        throw new Error(
+          detail ? `${createData.error}: ${detail}` : createData.error ?? "Could not start checkout",
+        );
       }
 
       if (!createData.configured) {
@@ -63,7 +69,7 @@ export default function CheckoutPage() {
         return;
       }
 
-      if (!scriptReady || !window.Razorpay) {
+      if (!window.Razorpay) {
         throw new Error("Payment SDK failed to load. Please retry.");
       }
 
@@ -123,10 +129,7 @@ export default function CheckoutPage() {
 
   return (
     <div className="px-4 py-14 sm:px-6 lg:px-8">
-      <Script
-        src="https://checkout.razorpay.com/v1/checkout.js"
-        onLoad={() => setScriptReady(true)}
-      />
+      <Script src="https://checkout.razorpay.com/v1/checkout.js" />
       <div className="mx-auto max-w-4xl">
         <h1 className="font-heading text-3xl font-bold text-ink">Checkout</h1>
 

@@ -39,6 +39,7 @@ export type WholesaleEnquiryInput = z.infer<typeof wholesaleEnquirySchema>;
 export const exportEnquirySchema = z.object({
   country: z.string().trim().min(2, "Country is required"),
   companyName: z.string().trim().min(2, "Company name is required"),
+  email: z.string().trim().email("Enter a valid email"),
   importLicense: z.string().trim().optional().or(z.literal("")),
   destinationPort: z.string().trim().min(2, "Destination port is required"),
   containerRequirement: z

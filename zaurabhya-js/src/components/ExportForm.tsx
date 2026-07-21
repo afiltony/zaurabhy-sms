@@ -59,6 +59,13 @@ export default function ExportForm() {
           />
         </div>
         <TextField
+          label="Email"
+          type="email"
+          variant="dark"
+          {...register("email")}
+          error={errors.email?.message}
+        />
+        <TextField
           label="Import License"
           variant="dark"
           {...register("importLicense")}
