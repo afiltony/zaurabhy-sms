@@ -77,7 +77,9 @@ export const dealerRegistrationSchema = z.object({
 
 export type DealerRegistrationInput = z.infer<typeof dealerRegistrationSchema>;
 
-export const checkoutSchema = z.object({
+export const paymentMethodOptions = ["razorpay", "payu", "cod"] as const;
+
+const checkoutObjectSchema = z.object({
   fullName: z.string().trim().min(2, "Your name is required"),
   phone: z
     .string()
@@ -94,6 +96,11 @@ export const checkoutSchema = z.object({
     .string()
     .trim()
     .regex(/^[0-9]{6}$/, "Enter a valid 6-digit pincode"),
+  poBox: z.string().trim().optional().or(z.literal("")),
+  confirmPhone: z.string().trim().optional().or(z.literal("")),
+  paymentMethod: z.enum(paymentMethodOptions, {
+    message: "Select a payment method",
+  }),
   items: z
     .array(
       z.object({
@@ -105,4 +112,63 @@ export const checkoutSchema = z.object({
     .min(1, "Your cart is empty"),
 });
 
+/**
+ * COD orders are more prone to fake/mistyped details, so require a PO Box
+ * and a re-typed phone number (must match) before accepting the order.
+ */
+function requireCodDetails<T extends z.ZodType>(schema: T) {
+  return schema.superRefine((data, ctx) => {
+    const { paymentMethod, poBox, confirmPhone, phone } = data as {
+      paymentMethod: string;
+      poBox?: string;
+      confirmPhone?: string;
+      phone: string;
+    };
+    if (paymentMethod !== "cod") return;
+
+    if (!poBox?.trim()) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["poBox"],
+        message: "PO Box is required for Cash on Delivery orders",
+      });
+    }
+
+    if (!confirmPhone?.trim()) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["confirmPhone"],
+        message: "Please re-enter the phone number to confirm",
+      });
+    } else if (confirmPhone !== phone) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["confirmPhone"],
+        message: "Phone numbers do not match",
+      });
+    }
+  });
+}
+
+export const checkoutSchema = requireCodDetails(checkoutObjectSchema);
+export const checkoutFormSchema = requireCodDetails(
+  checkoutObjectSchema.omit({ items: true }),
+);
+
 export type CheckoutInput = z.infer<typeof checkoutSchema>;
+
+export const contactEnquirySchema = z.object({
+  fullName: z.string().trim().min(2, "Your name is required"),
+  email: z.string().trim().email("Enter a valid email"),
+  phone: z
+    .string()
+    .trim()
+    .min(7, "Enter a valid phone number")
+    .max(20, "Enter a valid phone number")
+    .regex(/^[0-9+\-\s()]+$/, "Enter a valid phone number")
+    .optional()
+    .or(z.literal("")),
+  message: z.string().trim().min(10, "Please add a short message"),
+});
+
+export type ContactEnquiryInput = z.infer<typeof contactEnquirySchema>;

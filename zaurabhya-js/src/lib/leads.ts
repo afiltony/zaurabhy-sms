@@ -7,7 +7,8 @@ export async function appendLead(
   fileName:
     | "wholesale-enquiries.jsonl"
     | "export-enquiries.jsonl"
-    | "dealer-registrations.jsonl",
+    | "dealer-registrations.jsonl"
+    | "contact-messages.jsonl",
   record: Record<string, unknown>,
 ) {
   await mkdir(DATA_DIR, { recursive: true });

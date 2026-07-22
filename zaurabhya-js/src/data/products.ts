@@ -14,6 +14,8 @@ export type Product = {
   name: string;
   description: string;
   longDescription: string;
+  /** Short scannable selling points shown as bullets on the product page. */
+  highlights: string[];
   caption: string;
   image: string | null;
   /** Up to 3 gallery photos for the product detail page. */
@@ -71,6 +73,12 @@ export const PRODUCTS: Product[] = [
       "Traditional Kerala rice with excellent taste and high fiber content.",
     longDescription:
       "Grown on our own farms in Kerala, this raw rice is minimally polished to retain its natural bran and fiber. A daily staple with a satisfying bite, perfect for everyday meals.",
+    highlights: [
+      "Grown on our own farms in Kerala",
+      "Minimally polished to retain natural bran and fiber",
+      "Satisfying bite, great for everyday meals",
+      "Naturally high in dietary fiber",
+    ],
     caption: "high fiber raw rice — pack + grains",
     image: "/products/raw-rice.jpg",
     images: ["/products/raw-rice.jpg", "/products/raw-rice-loose.jpg", null],
@@ -83,6 +91,12 @@ export const PRODUCTS: Product[] = [
     description: "Perfect texture for crispy, golden dosas.",
     longDescription:
       "Specially selected for its starch content and grind quality, our dosa rice delivers crispy, golden dosas every time — a South Indian breakfast essential.",
+    highlights: [
+      "Selected for ideal starch content and grind quality",
+      "Delivers crispy, golden dosas every time",
+      "A South Indian breakfast essential",
+      "Grown and packed on our own farms",
+    ],
     caption: "dosa rice",
     image: "/products/2-kg-dosa-rice.jpg",
     images: [
@@ -99,6 +113,12 @@ export const PRODUCTS: Product[] = [
     description: "Traditional Kerala appam rice for lacy, soft appams.",
     longDescription:
       "Sourced from traditional Kerala paddy varieties, this appam rice ferments beautifully for lacy-edged, soft-centered appams.",
+    highlights: [
+      "Sourced from traditional Kerala paddy varieties",
+      "Ferments beautifully for lacy-edged, soft appams",
+      "Grown and packed on our own farms",
+      "A trusted staple for South Indian breakfasts",
+    ],
     caption: "appam rice",
     image: "/products/2-kg-appam-rice.jpg",
     images: ["/products/2-kg-appam-rice.jpg", "/products/raw-rice-loose.jpg", null],
@@ -111,6 +131,12 @@ export const PRODUCTS: Product[] = [
     description: "Soft, fluffy idlis every single time.",
     longDescription:
       "A parboiled rice variety chosen for consistent fermentation, giving you soft, fluffy idlis on every batch.",
+    highlights: [
+      "Parboiled rice chosen for consistent fermentation",
+      "Gives soft, fluffy idlis on every batch",
+      "A trusted South Indian kitchen staple",
+      "Grown and packed on our own farms",
+    ],
     caption: "idli rice",
     image: "/products/2-kg-idli-rice.jpg",
     images: ["/products/2-kg-idli-rice.jpg", "/products/raw-rice-loose.jpg", null],
@@ -124,6 +150,12 @@ export const PRODUCTS: Product[] = [
       "Naturally sun-dried on our own farms — the soul of Kerala fish curry.",
     longDescription:
       "Also known as kudampuli or gambooge, our Malabar tamarind is hand-picked and naturally sun-dried on our own farms, giving Kerala fish curry its signature tang.",
+    highlights: [
+      "Hand-picked and naturally sun-dried on our own farms",
+      "Also known as kudampuli or gambooge",
+      "Gives Kerala fish curry its signature tang",
+      "No additives, naturally processed",
+    ],
     caption: "malabar tamarind — sun-dried kudampuli",
     image: "/products/kudam-puli.jpg",
     images: [

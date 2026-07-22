@@ -13,7 +13,7 @@ const NAV_LINKS = [
   { label: "Blog", href: "/blog" },
   { label: "Wholesale", href: "/#wholesale-enquiry" },
   { label: "Export", href: "/#export" },
-  { label: "Contact", href: "/#contact" },
+  { label: "Contact", href: "/contact" },
 ];
 
 export default function Navbar() {

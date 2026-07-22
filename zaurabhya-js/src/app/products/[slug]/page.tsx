@@ -32,7 +32,7 @@ export default async function ProductPage(
 
   return (
     <div className="px-4 py-14 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-2xl">
+      <div className="mx-auto max-w-5xl">
         <Link
           href="/products"
           className="text-sm font-semibold text-ink-muted transition hover:text-coral"
@@ -40,33 +40,56 @@ export default async function ProductPage(
           &larr; Back to shop
         </Link>
 
-        <div className="mt-5">
+        <h1 className="mt-5 font-heading text-3xl font-bold text-ink sm:text-4xl">
+          {product.name}
+        </h1>
+
+        <div className="mt-6 grid gap-8 lg:grid-cols-[1fr_360px] lg:items-start">
           <ProductGallery
             images={product.images}
             name={product.name}
             caption={product.caption}
           />
 
-          <h1 className="mt-8 font-heading text-3xl font-bold text-ink sm:text-4xl">
-            {product.name}
-          </h1>
+          <div className="lg:sticky lg:top-24">
+            <ProductPurchasePanel slug={product.slug} variants={product.variants} />
+
+            {product.amazonUrl && (
+              <a
+                href={product.amazonUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-3 flex items-center justify-center gap-2 rounded-full border border-border px-5 py-2.5 text-sm font-bold text-ink-soft transition hover:border-coral hover:text-coral"
+              >
+                <ExternalLink className="h-4 w-4" />
+                Available on Amazon
+              </a>
+            )}
+          </div>
+        </div>
+
+        <div className="mt-10 max-w-2xl">
+          <h2 className="font-heading text-lg font-bold text-ink">
+            About this item
+          </h2>
+          <ul className="mt-3 space-y-2">
+            {product.highlights.map((point) => (
+              <li
+                key={point}
+                className="flex items-start gap-2.5 text-sm leading-relaxed text-ink-soft"
+              >
+                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-teal" />
+                {point}
+              </li>
+            ))}
+          </ul>
+
+          <h2 className="mt-8 font-heading text-lg font-bold text-ink">
+            Product description
+          </h2>
           <p className="mt-3 text-base leading-relaxed text-ink-muted">
             {product.longDescription}
           </p>
-
-          <ProductPurchasePanel slug={product.slug} variants={product.variants} />
-
-          {product.amazonUrl && (
-            <a
-              href={product.amazonUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-4 inline-flex items-center gap-2 rounded-full border border-border px-5 py-2.5 text-sm font-bold text-ink-soft transition hover:border-coral hover:text-coral"
-            >
-              <ExternalLink className="h-4 w-4" />
-              Available on Amazon
-            </a>
-          )}
         </div>
       </div>
     </div>

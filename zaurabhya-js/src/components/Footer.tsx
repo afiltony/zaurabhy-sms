@@ -13,7 +13,7 @@ const BUSINESS_LINKS = [
   { label: "Dealer Registration", href: "/register" },
   { label: "Wholesale", href: "/#wholesale-enquiry" },
   { label: "Export", href: "/#export" },
-  { label: "Contact", href: "/#contact" },
+  { label: "Contact", href: "/contact" },
 ];
 
 const LEGAL_LINKS = [
@@ -30,7 +30,7 @@ const CONNECT_LINKS = [
 
 export default function Footer() {
   return (
-    <footer id="contact" className="px-4 pb-8 pt-11 sm:px-6 lg:px-8">
+    <footer className="px-4 pb-8 pt-11 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">
         <div className="mb-8 grid gap-6 sm:grid-cols-[2fr_1fr_1fr_1fr_1fr]">
           <div>

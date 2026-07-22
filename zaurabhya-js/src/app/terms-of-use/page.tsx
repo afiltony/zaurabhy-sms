@@ -125,8 +125,8 @@ export default function TermsOfUsePage() {
           <Section title="11. Contact us">
             <p>
               For questions about these Terms, please reach out via the{" "}
-              <Link href="/#contact" className="font-semibold text-teal hover:underline">
-                contact section
+              <Link href="/contact" className="font-semibold text-teal hover:underline">
+                contact page
               </Link>{" "}
               of our website.
             </p>

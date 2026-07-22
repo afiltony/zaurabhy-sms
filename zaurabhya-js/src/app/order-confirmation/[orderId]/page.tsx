@@ -11,26 +11,30 @@ export default async function OrderConfirmationPage(
   const order = await getOrder(orderId);
   if (!order) notFound();
 
+  const isCod = order.paymentMethod === "cod";
   const isPaid = order.status === "paid";
+  const isConfirmed = isPaid || isCod;
 
   return (
     <div className="px-4 py-20 text-center sm:px-6 lg:px-8">
       <div className="mx-auto max-w-lg">
-        {isPaid ? (
+        {isConfirmed ? (
           <CheckCircle2 className="mx-auto h-12 w-12 text-teal" />
         ) : (
           <Clock className="mx-auto h-12 w-12 text-coral" />
         )}
 
         <h1 className="mt-4 font-heading text-2xl font-bold text-ink sm:text-3xl">
-          {isPaid ? "Order confirmed!" : "Order received"}
+          {isPaid ? "Order confirmed!" : isCod ? "Order placed!" : "Order received"}
         </h1>
         <p className="mt-2 text-sm text-ink-muted">
           {isPaid
             ? "Thank you for your order. We'll send a confirmation to your email shortly."
-            : "Your order has been saved. We'll contact you shortly to confirm payment and delivery."}
+            : isCod
+              ? `Please keep ₹${order.amount} ready to pay in cash on delivery.`
+              : "Your order has been saved. We'll contact you shortly to confirm payment and delivery."}
         </p>
-        <p className="mt-1 text-xs text-ink-muted">Order ID: {order.id}</p>
+        <p className="mt-1 text-xs text-ink-muted">Order Number: {order.orderNumber}</p>
 
         <div className="mt-8 rounded-2xl border border-border bg-white p-6 text-left">
           <div className="space-y-2">
