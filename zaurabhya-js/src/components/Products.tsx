@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import PhotoPlaceholder from "@/components/PhotoPlaceholder";
 import AddToCartButton from "@/components/AddToCartButton";
+import BuyNowButton from "@/components/BuyNowButton";
 import { PRODUCTS, getDefaultVariant, getLowestPrice } from "@/data/products";
 
 export default function Products() {
@@ -13,15 +14,15 @@ export default function Products() {
             OUR PREMIUM PRODUCTS
           </p>
           <h2 className="font-heading text-3xl font-bold text-ink sm:text-4xl">
-            Five staples, one source
+            Two staples, one source
           </h2>
         </div>
 
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="flex flex-wrap justify-center gap-5">
           {PRODUCTS.map((product) => (
             <article
               key={product.slug}
-              className="flex flex-col overflow-hidden rounded-2xl border border-border bg-white"
+              className="flex w-full max-w-sm flex-col overflow-hidden rounded-2xl border border-border bg-white sm:w-[calc(50%-0.625rem)]"
             >
               <Link href={`/products/${product.slug}`}>
                 {product.image ? (
@@ -55,17 +56,16 @@ export default function Products() {
                   </span>
                 </p>
                 <div className="mt-4 flex flex-col gap-2">
-                  <AddToCartButton
+                  <BuyNowButton
                     slug={product.slug}
                     variantId={getDefaultVariant(product).id}
                     className="w-full rounded-full bg-coral px-4 py-2.5 text-center text-sm font-bold text-white transition hover:bg-teal"
                   />
-                  <Link
-                    href={`/products/${product.slug}`}
-                    className="text-center text-sm font-bold text-ink-soft transition hover:text-coral"
-                  >
-                    View &rarr;
-                  </Link>
+                  <AddToCartButton
+                    slug={product.slug}
+                    variantId={getDefaultVariant(product).id}
+                    className="w-full rounded-full border-[1.5px] border-coral px-4 py-2.5 text-center text-sm font-bold text-coral transition hover:bg-coral hover:text-white"
+                  />
                 </div>
               </div>
             </article>

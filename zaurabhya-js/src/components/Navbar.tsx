@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Menu, ShoppingCart, X } from "lucide-react";
 import AnnouncementBar from "@/components/AnnouncementBar";
 import { useCart } from "@/lib/cart-context";
@@ -19,6 +19,18 @@ const NAV_LINKS = [
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const { itemCount } = useCart();
+  const [bounce, setBounce] = useState(false);
+  const prevCount = useRef(itemCount);
+
+  useEffect(() => {
+    if (itemCount > prevCount.current) {
+      setBounce(true);
+      const timer = setTimeout(() => setBounce(false), 450);
+      prevCount.current = itemCount;
+      return () => clearTimeout(timer);
+    }
+    prevCount.current = itemCount;
+  }, [itemCount]);
 
   return (
     <div className="sticky top-0 z-50">
@@ -50,7 +62,9 @@ export default function Navbar() {
         <div className="hidden items-center gap-3 md:flex">
           <Link
             href="/cart"
-            className="relative inline-flex items-center justify-center rounded-full p-2 text-ink-soft transition hover:text-coral"
+            className={`relative inline-flex items-center justify-center rounded-full p-2 text-ink-soft transition hover:text-coral ${
+              bounce ? "animate-cart-bounce" : ""
+            }`}
             aria-label="View cart"
           >
             <ShoppingCart className="h-5 w-5" />

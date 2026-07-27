@@ -6,6 +6,7 @@ import Script from "next/script";
 import { useRouter } from "next/navigation";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { CreditCard, Wallet, Banknote, type LucideIcon } from "lucide-react";
 import TextField from "@/components/forms/TextField";
 import SelectField from "@/components/forms/SelectField";
 import { useCart } from "@/lib/cart-context";
@@ -20,10 +21,26 @@ import {
 type FormInput = Omit<CheckoutInput, "items">;
 type Step = 1 | 2 | 3;
 
-const PAYMENT_METHOD_LABELS: Record<(typeof paymentMethodOptions)[number], string> = {
-  razorpay: "Pay Online (Cards/UPI)",
-  payu: "PayU",
-  cod: "Cash on Delivery",
+const PAYMENT_METHOD_META: Record<
+  (typeof paymentMethodOptions)[number],
+  { label: string; description: string; icon: LucideIcon; badge?: string }
+> = {
+  razorpay: {
+    label: "Pay Online",
+    description: "Cards, UPI, Netbanking & wallets via Razorpay",
+    icon: CreditCard,
+    badge: "Recommended",
+  },
+  payu: {
+    label: "PayU",
+    description: "Pay securely via the PayU payment gateway",
+    icon: Wallet,
+  },
+  cod: {
+    label: "Cash on Delivery",
+    description: "Pay in cash when your order arrives",
+    icon: Banknote,
+  },
 };
 
 const ADDRESS_FIELDS = [
@@ -337,21 +354,45 @@ export default function CheckoutPage() {
               {step === 2 && (
                 <div className="mt-4">
                   <fieldset>
-                    <div className="flex flex-wrap gap-2">
-                      {paymentMethodOptions.map((option) => (
-                        <label
-                          key={option}
-                          className="cursor-pointer rounded-full border border-border px-3.5 py-1.5 text-[13px] font-semibold text-ink-soft transition has-[:checked]:border-teal has-[:checked]:bg-teal has-[:checked]:text-teal-foreground"
-                        >
-                          <input
-                            type="radio"
-                            value={option}
-                            {...register("paymentMethod")}
-                            className="sr-only"
-                          />
-                          {PAYMENT_METHOD_LABELS[option]}
-                        </label>
-                      ))}
+                    <div className="flex flex-col gap-2.5">
+                      {paymentMethodOptions.map((option) => {
+                        const meta = PAYMENT_METHOD_META[option];
+                        const Icon = meta.icon;
+                        return (
+                          <label
+                            key={option}
+                            className="group flex cursor-pointer items-start gap-3 rounded-xl border-[1.5px] border-border p-3.5 transition has-[:checked]:border-teal has-[:checked]:bg-teal/5"
+                          >
+                            <input
+                              type="radio"
+                              value={option}
+                              {...register("paymentMethod")}
+                              className="sr-only"
+                            />
+                            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-cream text-ink-soft transition group-has-[:checked]:bg-teal group-has-[:checked]:text-teal-foreground">
+                              <Icon className="h-5 w-5" />
+                            </span>
+                            <span className="flex-1">
+                              <span className="flex flex-wrap items-center gap-2">
+                                <span className="text-sm font-bold text-ink">
+                                  {meta.label}
+                                </span>
+                                {meta.badge && (
+                                  <span className="rounded-full bg-teal/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-teal">
+                                    {meta.badge}
+                                  </span>
+                                )}
+                              </span>
+                              <span className="mt-0.5 block text-xs text-ink-muted">
+                                {meta.description}
+                              </span>
+                            </span>
+                            <span className="mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 border-border transition group-has-[:checked]:border-teal">
+                              <span className="h-2.5 w-2.5 rounded-full bg-teal opacity-0 transition group-has-[:checked]:opacity-100" />
+                            </span>
+                          </label>
+                        );
+                      })}
                     </div>
                     {errors.paymentMethod && (
                       <p className="mt-1 text-xs text-coral">
@@ -391,7 +432,7 @@ export default function CheckoutPage() {
 
               {step > 2 && (
                 <p className="mt-2 text-sm text-ink-soft">
-                  {PAYMENT_METHOD_LABELS[getValues("paymentMethod")]}
+                  {PAYMENT_METHOD_META[getValues("paymentMethod")].label}
                 </p>
               )}
             </div>

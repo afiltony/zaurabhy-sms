@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import PhotoPlaceholder from "@/components/PhotoPlaceholder";
 import AddToCartButton from "@/components/AddToCartButton";
+import BuyNowButton from "@/components/BuyNowButton";
 import { PRODUCTS, getDefaultVariant, getLowestPrice } from "@/data/products";
 
 export const metadata: Metadata = {
@@ -20,7 +21,7 @@ export default function ProductsPage() {
             SHOP
           </p>
           <h1 className="font-heading text-3xl font-bold text-ink sm:text-4xl">
-            Five staples, one source
+            Two staples, one source
           </h1>
         </div>
 
@@ -61,18 +62,17 @@ export default function ProductsPage() {
                     / {getDefaultVariant(product).label}
                   </span>
                 </p>
-                <div className="mt-4 flex items-center gap-3">
-                  <AddToCartButton
+                <div className="mt-4 flex items-center gap-2">
+                  <BuyNowButton
                     slug={product.slug}
                     variantId={getDefaultVariant(product).id}
                     className="flex-1 rounded-full bg-coral px-4 py-2.5 text-center text-sm font-bold text-white transition hover:bg-teal"
                   />
-                  <Link
-                    href={`/products/${product.slug}`}
-                    className="text-sm font-bold text-ink-soft transition hover:text-coral"
-                  >
-                    View &rarr;
-                  </Link>
+                  <AddToCartButton
+                    slug={product.slug}
+                    variantId={getDefaultVariant(product).id}
+                    className="flex-1 rounded-full border-[1.5px] border-coral px-4 py-2.5 text-center text-sm font-bold text-coral transition hover:bg-coral hover:text-white"
+                  />
                 </div>
               </div>
             </article>

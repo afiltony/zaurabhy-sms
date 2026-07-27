@@ -29,12 +29,13 @@ export default function AddToCartButton({
         setTimeout(() => setAdded(false), 1500);
       }}
       className={
-        className ??
-        "rounded-full bg-coral px-5 py-2.5 text-sm font-bold text-white transition hover:bg-teal"
+        (className ??
+          "rounded-full bg-coral px-5 py-2.5 text-sm font-bold text-white transition hover:bg-teal") +
+        " transition-transform duration-150 active:scale-95"
       }
     >
       {added ? (
-        <span className="flex items-center justify-center gap-1.5">
+        <span className="flex items-center justify-center gap-1.5 animate-pop-in">
           <CheckCircle2 className="h-4 w-4" />
           Added
         </span>

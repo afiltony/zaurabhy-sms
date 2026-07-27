@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Minus, Plus, PackageCheck, ShieldCheck, Truck } from "lucide-react";
+import { Minus, Plus, PackageCheck, ShieldCheck, Truck, CheckCircle2, Loader2 } from "lucide-react";
 import { useCart } from "@/lib/cart-context";
 import type { ProductVariant } from "@/data/products";
 
@@ -15,6 +15,8 @@ export default function ProductPurchasePanel({
 }) {
   const [variantId, setVariantId] = useState(variants[0].id);
   const [quantity, setQuantity] = useState(1);
+  const [added, setAdded] = useState(false);
+  const [buying, setBuying] = useState(false);
   const { addItem } = useCart();
   const router = useRouter();
 
@@ -84,21 +86,41 @@ export default function ProductPurchasePanel({
       <div className="mt-5 flex flex-col gap-2.5">
         <button
           type="button"
+          disabled={buying}
           onClick={() => {
             addItem(slug, variantId, quantity);
-            router.push("/checkout");
+            setBuying(true);
+            setTimeout(() => router.push("/checkout"), 200);
           }}
-          className="w-full rounded-full bg-coral py-3 text-sm font-bold text-white transition hover:bg-teal"
+          className="flex w-full items-center justify-center gap-2 rounded-full bg-coral py-3 text-sm font-bold text-white transition-[background-color,transform] duration-150 hover:bg-teal active:scale-95 disabled:opacity-80"
         >
-          Buy Now
+          {buying ? (
+            <span className="flex items-center gap-1.5 animate-pop-in">
+              <Loader2 className="h-4 w-4 animate-spin" />
+              Adding...
+            </span>
+          ) : (
+            "Buy Now"
+          )}
         </button>
 
         <button
           type="button"
-          onClick={() => addItem(slug, variantId, quantity)}
-          className="w-full rounded-full border-[1.5px] border-coral py-3 text-sm font-bold text-coral transition hover:bg-coral hover:text-white"
+          onClick={() => {
+            addItem(slug, variantId, quantity);
+            setAdded(true);
+            setTimeout(() => setAdded(false), 1500);
+          }}
+          className="flex w-full items-center justify-center gap-2 rounded-full border-[1.5px] border-coral py-3 text-sm font-bold text-coral transition-[background-color,color,transform] duration-150 hover:bg-coral hover:text-white active:scale-95"
         >
-          Add to cart
+          {added ? (
+            <span className="flex items-center gap-1.5 animate-pop-in">
+              <CheckCircle2 className="h-4 w-4" />
+              Added to cart
+            </span>
+          ) : (
+            "Add to cart"
+          )}
         </button>
       </div>
 

@@ -67,25 +67,6 @@ const RICE_VARIANTS: ProductVariant[] = [
 
 export const PRODUCTS: Product[] = [
   {
-    slug: "high-fiber-raw-rice",
-    name: "High Fiber Raw Rice",
-    description:
-      "Traditional Kerala rice with excellent taste and high fiber content.",
-    longDescription:
-      "Grown on our own farms in Kerala, this raw rice is minimally polished to retain its natural bran and fiber. A daily staple with a satisfying bite, perfect for everyday meals.",
-    highlights: [
-      "Grown on our own farms in Kerala",
-      "Minimally polished to retain natural bran and fiber",
-      "Satisfying bite, great for everyday meals",
-      "Naturally high in dietary fiber",
-    ],
-    caption: "high fiber raw rice — pack + grains",
-    image: "/products/raw-rice.jpg",
-    images: ["/products/raw-rice.jpg", "/products/raw-rice-loose.jpg", null],
-    variants: RICE_VARIANTS,
-    amazonUrl: AMAZON_URL,
-  },
-  {
     slug: "dosa-rice",
     name: "Dosa Rice",
     description: "Perfect texture for crispy, golden dosas.",
@@ -104,42 +85,6 @@ export const PRODUCTS: Product[] = [
       "/products/raw-rice-loose.jpg",
       "/products/prpration-dosa-rice.jpg",
     ],
-    variants: RICE_VARIANTS,
-    amazonUrl: AMAZON_URL,
-  },
-  {
-    slug: "appam-rice",
-    name: "Appam Rice",
-    description: "Traditional Kerala appam rice for lacy, soft appams.",
-    longDescription:
-      "Sourced from traditional Kerala paddy varieties, this appam rice ferments beautifully for lacy-edged, soft-centered appams.",
-    highlights: [
-      "Sourced from traditional Kerala paddy varieties",
-      "Ferments beautifully for lacy-edged, soft appams",
-      "Grown and packed on our own farms",
-      "A trusted staple for South Indian breakfasts",
-    ],
-    caption: "appam rice",
-    image: "/products/2-kg-appam-rice.jpg",
-    images: ["/products/2-kg-appam-rice.jpg", "/products/raw-rice-loose.jpg", null],
-    variants: RICE_VARIANTS,
-    amazonUrl: AMAZON_URL,
-  },
-  {
-    slug: "idli-rice",
-    name: "Idli Rice",
-    description: "Soft, fluffy idlis every single time.",
-    longDescription:
-      "A parboiled rice variety chosen for consistent fermentation, giving you soft, fluffy idlis on every batch.",
-    highlights: [
-      "Parboiled rice chosen for consistent fermentation",
-      "Gives soft, fluffy idlis on every batch",
-      "A trusted South Indian kitchen staple",
-      "Grown and packed on our own farms",
-    ],
-    caption: "idli rice",
-    image: "/products/2-kg-idli-rice.jpg",
-    images: ["/products/2-kg-idli-rice.jpg", "/products/raw-rice-loose.jpg", null],
     variants: RICE_VARIANTS,
     amazonUrl: AMAZON_URL,
   },

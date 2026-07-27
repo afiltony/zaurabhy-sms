@@ -66,18 +66,6 @@ export default function Hero() {
           >
             Become a Dealer
           </Link>
-          <a
-            href="#wholesale-enquiry"
-            className="rounded-full border-[1.5px] border-[#f4ead6]/60 px-6 py-3.5 text-sm font-bold text-[#f4ead6] transition hover:border-teal hover:bg-teal hover:text-white"
-          >
-            Wholesale Price
-          </a>
-          <a
-            href="#export"
-            className="rounded-full border-[1.5px] border-[#f4ead6]/60 px-6 py-3.5 text-sm font-bold text-[#f4ead6] transition hover:border-teal hover:bg-teal hover:text-white"
-          >
-            Export Enquiry
-          </a>
         </div>
       </div>
     </section>
