@@ -3,10 +3,12 @@ import Image from "next/image";
 import Link from "next/link";
 import PhotoPlaceholder from "@/components/PhotoPlaceholder";
 import { BLOG_POSTS } from "@/data/blog";
+import { withSiteKeywords } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Blog",
   description: "Stories from our farms, recipes, and rice know-how.",
+  keywords: withSiteKeywords("Kerala rice farming blog", "Kerala rice recipes"),
 };
 
 export default function BlogPage() {

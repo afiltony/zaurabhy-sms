@@ -22,6 +22,8 @@ export type Product = {
   images: (string | null)[];
   variants: ProductVariant[];
   amazonUrl?: string;
+  /** SEO keywords for this product's detail page meta tag. */
+  keywords: string[];
 };
 
 const AMAZON_URL = "https://link.amazon/B010Gv0Aj";
@@ -87,6 +89,14 @@ export const PRODUCTS: Product[] = [
     ],
     variants: RICE_VARIANTS,
     amazonUrl: AMAZON_URL,
+    keywords: [
+      "dosa rice",
+      "high fiber dosa rice",
+      "high fiber dosa rice producer Kerala",
+      "raw rice from Kerala",
+      "Kerala dosa rice",
+      "buy dosa rice online",
+    ],
   },
   {
     slug: "malabar-tamarind",
@@ -109,6 +119,16 @@ export const PRODUCTS: Product[] = [
       "/products/malabar-tamarind-specs.jpg",
     ],
     amazonUrl: AMAZON_URL,
+    keywords: [
+      "kudam puli",
+      "kudampuli",
+      "high oil content kudam puli",
+      "Garcinia gummi-gutta",
+      "Kerala kudam puli organic",
+      "organic kudam puli",
+      "Malabar tamarind",
+      "gambooge",
+    ],
     variants: [
       {
         id: "500g",

@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import { Mail, MapPin, Phone } from "lucide-react";
 import ContactForm from "@/components/ContactForm";
+import { withSiteKeywords } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Contact Us",
   description:
     "Get in touch with ZAURABHYA (operated by VIMATONS SIGNS (OPC) PVT LTD) for orders, wholesale, export, or general enquiries.",
+  keywords: withSiteKeywords("contact ZAURABHYA", "Kerala rice supplier contact"),
 };
 
 export default function ContactPage() {

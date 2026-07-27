@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import DealerRegistrationForm from "@/components/DealerRegistrationForm";
+import { withSiteKeywords } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Dealer Registration",
   description:
     "Register as a ZAURABHYA dealer, distributor, or retailer and get access to wholesale pricing on Kerala rice and Malabar tamarind.",
+  keywords: withSiteKeywords("Kerala rice dealer registration", "become a rice distributor"),
 };
 
 export default function RegisterPage() {

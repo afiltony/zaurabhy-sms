@@ -4,7 +4,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import ProductGallery from "@/components/ProductGallery";
 import ProductPurchasePanel from "@/components/ProductPurchasePanel";
-import { PRODUCTS, getProductBySlug } from "@/data/products";
+import { PRODUCTS, getProductBySlug, getLowestPrice } from "@/data/products";
+import { withSiteKeywords, SITE_URL } from "@/lib/seo";
 
 export function generateStaticParams() {
   return PRODUCTS.map((product) => ({ slug: product.slug }));
@@ -20,6 +21,7 @@ export async function generateMetadata(
   return {
     title: product.name,
     description: product.description,
+    keywords: withSiteKeywords(...product.keywords),
   };
 }
 
@@ -30,8 +32,29 @@ export default async function ProductPage(
   const product = getProductBySlug(slug);
   if (!product) notFound();
 
+  const productJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    description: product.longDescription,
+    image: product.images.filter((src): src is string => Boolean(src)),
+    brand: { "@type": "Brand", name: "ZAURABHYA" },
+    url: `${SITE_URL}/products/${product.slug}`,
+    offers: {
+      "@type": "AggregateOffer",
+      priceCurrency: "INR",
+      lowPrice: getLowestPrice(product),
+      offerCount: product.variants.length,
+      availability: "https://schema.org/InStock",
+    },
+  };
+
   return (
     <div className="px-4 py-14 sm:px-6 lg:px-8">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+      />
       <div className="mx-auto max-w-5xl">
         <Link
           href="/products"

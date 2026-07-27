@@ -5,11 +5,13 @@ import PhotoPlaceholder from "@/components/PhotoPlaceholder";
 import AddToCartButton from "@/components/AddToCartButton";
 import BuyNowButton from "@/components/BuyNowButton";
 import { PRODUCTS, getDefaultVariant, getLowestPrice } from "@/data/products";
+import { withSiteKeywords } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Shop",
   description:
     "Shop premium Kerala rice varieties and Malabar tamarind, direct from our own farms.",
+  keywords: withSiteKeywords("buy Kerala rice online", "shop Kerala rice and tamarind"),
 };
 
 export default function ProductsPage() {

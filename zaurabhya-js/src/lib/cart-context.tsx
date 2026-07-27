@@ -3,6 +3,7 @@
 import {
   createContext,
   useContext,
+  useEffect,
   useMemo,
   useSyncExternalStore,
   type ReactNode,
@@ -35,6 +36,10 @@ function isValidCartItem(value: unknown): value is CartItem {
   );
 }
 
+function isKnownVariant(item: CartItem): boolean {
+  return Boolean(getVariant(item.slug, item.variantId));
+}
+
 function readFromStorage(): CartItem[] {
   if (typeof window === "undefined") return EMPTY_ITEMS;
   try {
@@ -42,7 +47,7 @@ function readFromStorage(): CartItem[] {
     if (!raw) return EMPTY_ITEMS;
     const parsed = JSON.parse(raw);
     if (!Array.isArray(parsed)) return EMPTY_ITEMS;
-    return parsed.filter(isValidCartItem);
+    return parsed.filter(isValidCartItem).filter(isKnownVariant);
   } catch {
     return EMPTY_ITEMS;
   }
@@ -130,6 +135,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
     getSnapshot,
     getServerSnapshot,
   );
+
+  useEffect(() => {
+    if (currentItems.some((item) => !isKnownVariant(item))) {
+      setItems(currentItems.filter(isKnownVariant));
+    }
+  }, [currentItems]);
 
   const itemCount = currentItems.reduce((sum, item) => sum + item.quantity, 0);
   const subtotal = currentItems.reduce((sum, item) => {

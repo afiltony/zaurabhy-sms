@@ -3,6 +3,7 @@ import { Bricolage_Grotesque, Inter } from "next/font/google";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { CartProvider } from "@/lib/cart-context";
+import { SITE_KEYWORDS, SITE_URL } from "@/lib/seo";
 import "./globals.css";
 
 const bricolage = Bricolage_Grotesque({
@@ -15,7 +16,7 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
-const siteUrl = "https://www.zaurabhya.com";
+const siteUrl = SITE_URL;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -25,18 +26,7 @@ export const metadata: Metadata = {
   },
   description:
     "ZAURABHYA supplies premium high-fiber Kerala rice varieties (raw, dosa, appam, idli) and Malabar tamarind (kudampuli), grown on our own farms. FSSAI certified, wholesale and export ready.",
-  keywords: [
-    "Kerala rice",
-    "high fiber rice",
-    "dosa rice",
-    "appam rice",
-    "idli rice",
-    "Malabar tamarind",
-    "kudampuli",
-    "Kerala rice wholesale",
-    "Kerala rice export",
-    "ZAURABHYA",
-  ],
+  keywords: SITE_KEYWORDS,
   openGraph: {
     type: "website",
     locale: "en_IN",

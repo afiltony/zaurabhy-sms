@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { withSiteKeywords } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Return Policy",
   description:
     "Our policy on returns, replacements, and refunds for ZAURABHYA Kerala rice and Malabar tamarind orders.",
+  keywords: withSiteKeywords("ZAURABHYA return policy", "Kerala rice refund policy"),
 };
 
 const LAST_UPDATED = "18 July 2026";

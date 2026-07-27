@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { withSiteKeywords } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Terms of Use",
   description:
     "Terms and conditions governing your use of the ZAURABHYA website and services.",
+  keywords: withSiteKeywords("ZAURABHYA terms of use"),
 };
 
 const LAST_UPDATED = "18 July 2026";

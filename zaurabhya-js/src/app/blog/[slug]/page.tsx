@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import PhotoPlaceholder from "@/components/PhotoPlaceholder";
 import { BLOG_POSTS, getPostBySlug } from "@/data/blog";
+import { withSiteKeywords } from "@/lib/seo";
 
 export function generateStaticParams() {
   return BLOG_POSTS.map((post) => ({ slug: post.slug }));
@@ -19,6 +20,7 @@ export async function generateMetadata(
   return {
     title: post.title,
     description: post.excerpt,
+    keywords: withSiteKeywords("Kerala rice farming blog"),
   };
 }
 
