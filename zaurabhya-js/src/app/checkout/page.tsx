@@ -223,6 +223,26 @@ export default function CheckoutPage() {
           ondismiss: () => setStatus("idle"),
         },
       });
+      razorpay.on("payment.failed", (response) => {
+        fetch("/api/checkout/payment-failed", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            orderId: createData.orderId,
+            razorpay_order_id: response.error.metadata.order_id,
+            razorpay_payment_id: response.error.metadata.payment_id,
+            code: response.error.code,
+            description: response.error.description,
+            reason: response.error.reason,
+            source: response.error.source,
+            step: response.error.step,
+          }),
+        }).catch(() => {});
+        setErrorMessage(
+          response.error.description || "Payment failed. Please try again.",
+        );
+        setStatus("error");
+      });
       razorpay.open();
     } catch (err) {
       setErrorMessage(err instanceof Error ? err.message : "Something went wrong");

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import Razorpay from "razorpay";
 import { getOrderByRazorpayOrderId, updateOrderStatus } from "@/lib/orders";
+import { sendErrorAlert } from "@/lib/mail";
 
 /**
  * Server-to-server notification from Razorpay. This is the reliable source of
@@ -35,10 +36,21 @@ export async function POST(request: Request) {
   ) {
     const order = await getOrderByRazorpayOrderId(payment.order_id);
     if (order && order.status === "created") {
+      const status = event.event === "payment.captured" ? "paid" : "failed";
       await updateOrderStatus(order.id, {
-        status: event.event === "payment.captured" ? "paid" : "failed",
+        status,
         razorpayPaymentId: payment.id,
       });
+      if (status === "failed") {
+        await sendErrorAlert("Razorpay payment failed (webhook)", {
+          orderNumber: order.orderNumber,
+          orderId: order.id,
+          razorpayOrderId: payment.order_id,
+          razorpayPaymentId: payment.id,
+          errorCode: payment.error_code,
+          errorDescription: payment.error_description,
+        });
+      }
     }
   }
 

@@ -5,6 +5,7 @@ import { resolveOrderPricing } from "@/lib/checkout";
 import { createOrder, getNextOrderNumber } from "@/lib/orders";
 import { getRazorpayClient, isRazorpayConfigured } from "@/lib/razorpay";
 import { buildPayuHash, getPayuBaseUrl, isPayuConfigured } from "@/lib/payu";
+import { sendErrorAlert } from "@/lib/mail";
 
 export async function POST(request: Request) {
   const body = await request.json().catch(() => null);
@@ -143,6 +144,12 @@ export async function POST(request: Request) {
     });
   } catch (err) {
     console.error("Razorpay order creation failed:", err);
+    await sendErrorAlert("Razorpay order creation failed", {
+      orderNumber,
+      amount: pricing.amount,
+      customerEmail: shipping.email,
+      error: err instanceof Error ? err.message : String(err),
+    });
     return NextResponse.json(
       { error: "Could not reach the payment gateway. Please try again." },
       { status: 502 },

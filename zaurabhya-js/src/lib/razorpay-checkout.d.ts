@@ -15,10 +15,25 @@ export type RazorpayCheckoutOptions = {
   modal?: { ondismiss?: () => void };
 };
 
+export type RazorpayPaymentFailedResponse = {
+  error: {
+    code: string;
+    description: string;
+    source: string;
+    step: string;
+    reason: string;
+    metadata: { order_id?: string; payment_id?: string };
+  };
+};
+
 declare global {
   interface Window {
     Razorpay: new (options: RazorpayCheckoutOptions) => {
       open: () => void;
+      on: (
+        event: "payment.failed",
+        handler: (response: RazorpayPaymentFailedResponse) => void,
+      ) => void;
     };
   }
 }

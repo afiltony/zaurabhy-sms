@@ -2,6 +2,7 @@ import { createHmac, timingSafeEqual } from "crypto";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { updateOrderStatus } from "@/lib/orders";
+import { sendErrorAlert } from "@/lib/mail";
 
 const verifySchema = z.object({
   orderId: z.string().trim().min(1),
@@ -42,6 +43,11 @@ export async function POST(request: Request) {
     await updateOrderStatus(orderId, {
       status: "failed",
       razorpayPaymentId: razorpay_payment_id,
+    });
+    await sendErrorAlert("Razorpay signature verification failed", {
+      orderId,
+      razorpay_order_id,
+      razorpay_payment_id,
     });
     return NextResponse.json({ error: "Payment verification failed" }, { status: 400 });
   }

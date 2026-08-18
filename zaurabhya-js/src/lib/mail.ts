@@ -65,6 +65,26 @@ export async function sendLeadNotification(
   }
 }
 
+const ALERT_EMAIL = process.env.ALERT_NOTIFICATION_EMAIL || "lscctony@gmail.com";
+
+export async function sendErrorAlert(subject: string, record: Record<string, unknown>) {
+  if (!isMailConfigured()) {
+    console.warn(`SMTP not configured; skipping error alert: ${subject}`);
+    return;
+  }
+
+  try {
+    await getTransporter().sendMail({
+      from: `"ZAURABHYA Website" <${process.env.SMTP_USER}>`,
+      to: ALERT_EMAIL,
+      subject: `[ZAURABHYA Alert] ${subject}`,
+      html: `<table cellpadding="0" cellspacing="0" style="border-collapse:collapse;font-family:sans-serif;font-size:14px">${renderRecord(record)}</table>`,
+    });
+  } catch (err) {
+    console.error(`Failed to send error alert email (${subject}):`, err);
+  }
+}
+
 export async function sendAutoReply(to: string, name: string, message: string) {
   if (!isMailConfigured()) {
     console.warn(`SMTP not configured; skipping auto-reply to ${to}`);
