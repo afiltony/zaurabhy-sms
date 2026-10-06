@@ -9,7 +9,8 @@ import { PRODUCTS, getProductBySlug, getLowestPrice } from "@/data/products";
 import { paiseToDecimal, toMerchantListing } from "@/lib/merchant";
 import { isPrebookingProductId, toPublicConfig } from "@/lib/prebooking/config";
 import { getSettingsForDisplay } from "@/lib/prebooking/server";
-import { withSiteKeywords, SITE_URL } from "@/lib/seo";
+import RegionalBreakfastTerms from "@/components/RegionalBreakfastTerms";
+import { REGIONAL_BREAKFAST_KEYWORDS, withSiteKeywords, SITE_URL } from "@/lib/seo";
 
 // Lets a pre-booking price change made in /admin/settings reach this page
 // (saving the settings also revalidates it immediately).
@@ -26,19 +27,28 @@ export async function generateMetadata(
   const product = getProductBySlug(slug);
   if (!product) return {};
 
+  const breakfastKeywords = product.breakfastTerms ? REGIONAL_BREAKFAST_KEYWORDS : [];
+
   if (product.preBooking) {
     const name = product.name.toLowerCase();
     return {
       title: `${product.name} Pre-Booking`,
-      description: `Premium Zaurabhya ${product.name} — pre-book directly from our farm. ${product.description}`,
-      keywords: withSiteKeywords(...product.keywords, `${name} pre-booking`, `bulk ${name}`),
+      description:
+        product.seoDescription ??
+        `Premium Zaurabhya ${product.name} — pre-book directly from our farm. ${product.description}`,
+      keywords: withSiteKeywords(
+        ...product.keywords,
+        `${name} pre-booking`,
+        `bulk ${name}`,
+        ...breakfastKeywords,
+      ),
     };
   }
 
   return {
     title: product.name,
-    description: product.description,
-    keywords: withSiteKeywords(...product.keywords),
+    description: product.seoDescription ?? product.description,
+    keywords: withSiteKeywords(...product.keywords, ...breakfastKeywords),
   };
 }
 
@@ -196,6 +206,8 @@ export default async function ProductPage(
           <p className="mt-3 text-base leading-relaxed text-ink-muted">
             {product.longDescription}
           </p>
+
+          {product.breakfastTerms && <RegionalBreakfastTerms />}
         </div>
       </div>
     </div>

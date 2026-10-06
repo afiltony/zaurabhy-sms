@@ -13,6 +13,10 @@ export type Product = {
   slug: string;
   name: string;
   description: string;
+  /** Search-result description for the product page; falls back to one built from `description`. */
+  seoDescription?: string;
+  /** Show the "healthy breakfast in your language" block and use its terms as keywords. */
+  breakfastTerms?: boolean;
   longDescription: string;
   /** Short scannable selling points shown as bullets on the product page. */
   highlights: string[];
@@ -77,6 +81,9 @@ export const PRODUCTS: Product[] = [
     slug: "dosa-rice",
     name: "Dosa Rice",
     description: "Perfect texture for crispy, golden dosas.",
+    seoDescription:
+      "High-fiber Kerala dosa rice for a healthy breakfast: crispy healthy dosa, soft idli and appam. Pre-book farm-direct from Zaurabhya, delivered across India.",
+    breakfastTerms: true,
     longDescription:
       "Specially selected for its starch content and grind quality, our dosa rice delivers crispy, golden dosas every time — a South Indian breakfast essential.",
     highlights: [
