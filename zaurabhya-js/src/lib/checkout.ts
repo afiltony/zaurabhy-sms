@@ -1,4 +1,4 @@
-import { getVariant } from "@/data/products";
+import { getVariant, isPreBookingProduct } from "@/data/products";
 import { computeShipping } from "@/data/shipping";
 import type { CheckoutInput } from "@/lib/validation";
 
@@ -15,6 +15,9 @@ export function resolveOrderPricing(
 ): OrderPricing | { error: string } {
   let itemsSubtotal = 0;
   for (const item of items) {
+    if (isPreBookingProduct(item.slug)) {
+      return { error: "This product is available by pre-booking only" };
+    }
     const variant = getVariant(item.slug, item.variantId);
     if (!variant) {
       return { error: `Unknown product variant: ${item.slug} / ${item.variantId}` };

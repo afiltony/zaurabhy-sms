@@ -8,7 +8,7 @@ import {
   useSyncExternalStore,
   type ReactNode,
 } from "react";
-import { getVariant } from "@/data/products";
+import { getVariant, isPreBookingProduct } from "@/data/products";
 
 export type CartItem = {
   slug: string;
@@ -36,8 +36,9 @@ function isValidCartItem(value: unknown): value is CartItem {
   );
 }
 
+/** Also drops pre-booking products, which can no longer be bought through the cart. */
 function isKnownVariant(item: CartItem): boolean {
-  return Boolean(getVariant(item.slug, item.variantId));
+  return Boolean(getVariant(item.slug, item.variantId)) && !isPreBookingProduct(item.slug);
 }
 
 function readFromStorage(): CartItem[] {
@@ -83,6 +84,7 @@ function isSameLine(item: CartItem, slug: string, variantId: string) {
 }
 
 function addItem(slug: string, variantId: string, quantity = 1) {
+  if (isPreBookingProduct(slug)) return;
   const existing = items.find((item) => isSameLine(item, slug, variantId));
   if (existing) {
     setItems(

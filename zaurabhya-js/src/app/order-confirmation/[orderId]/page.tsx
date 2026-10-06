@@ -3,11 +3,58 @@ import { notFound } from "next/navigation";
 import { CheckCircle2, Clock } from "lucide-react";
 import { getOrder } from "@/lib/orders";
 import { getProductBySlug, getVariant } from "@/data/products";
+import type { Metadata } from "next";
+import PrebookingOrderStatus from "@/components/prebooking/PrebookingOrderStatus";
+import { prebooking } from "@/lib/prebooking/server";
+import { tokensMatch, toPublicOrder } from "@/lib/prebooking/service";
+import { buildUpiPaymentDetails } from "@/lib/prebooking/upi";
+import { ORDER_NUMBER_PATTERN } from "@/lib/prebooking/validation";
+
+export const metadata: Metadata = {
+  title: "Order Status",
+  robots: { index: false, follow: false },
+};
+
+/** Pre-booking orders (ZR-DR-..., ZR-MT-...) live in the database, not the retail orders file. */
+async function PrebookingConfirmation({
+  orderNumber,
+  token,
+}: {
+  orderNumber: string;
+  token: string | undefined;
+}) {
+  const order = await prebooking.getOrder(orderNumber);
+  if (!order) notFound();
+
+  const canPay =
+    Boolean(token) &&
+    tokensMatch(order.clientToken, token!) &&
+    (order.paymentStatus === "PENDING" || order.paymentStatus === "FAILED");
+  const payable = canPay
+    ? {
+        clientToken: order.clientToken,
+        upi: await buildUpiPaymentDetails(
+          (await prebooking.getSettings()).upi,
+          order.grandTotalPaise,
+          order.orderNumber,
+        ),
+      }
+    : null;
+
+  return <PrebookingOrderStatus order={toPublicOrder(order)} payable={payable} />;
+}
 
 export default async function OrderConfirmationPage(
   props: PageProps<"/order-confirmation/[orderId]">,
 ) {
   const { orderId } = await props.params;
+  if (ORDER_NUMBER_PATTERN.test(orderId)) {
+    const { t } = await props.searchParams;
+    return (
+      <PrebookingConfirmation orderNumber={orderId} token={typeof t === "string" ? t : undefined} />
+    );
+  }
+
   const order = await getOrder(orderId);
   if (!order) notFound();
 

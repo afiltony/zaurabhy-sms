@@ -10,6 +10,9 @@ import Testimonials from "@/components/Testimonials";
 import BlogPreview from "@/components/BlogPreview";
 import DealerCta from "@/components/DealerCta";
 
+// The product cards show the pre-booking price from /admin/settings.
+export const revalidate = 300;
+
 export default function Home() {
   return (
     <>

@@ -65,7 +65,23 @@ export async function sendLeadNotification(
   }
 }
 
-const ALERT_EMAIL = process.env.ALERT_NOTIFICATION_EMAIL || "lscctony@gmail.com";
+/** Generic sender for transactional email. Unlike the other helpers here, it throws so callers can retry. */
+export async function sendEmail(message: {
+  to: string;
+  subject: string;
+  html: string;
+  text?: string;
+}) {
+  if (!isMailConfigured()) {
+    throw new Error("SMTP is not configured (SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASSWORD)");
+  }
+  await getTransporter().sendMail({
+    from: `"ZAURABHYA" <${process.env.SMTP_USER}>`,
+    ...message,
+  });
+}
+
+const ALERT_EMAIL =process.env.ALERT_NOTIFICATION_EMAIL || "lscctony@gmail.com";
 
 export async function sendErrorAlert(subject: string, record: Record<string, unknown>) {
   if (!isMailConfigured()) {

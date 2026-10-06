@@ -1,11 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import PhotoPlaceholder from "@/components/PhotoPlaceholder";
-import AddToCartButton from "@/components/AddToCartButton";
-import BuyNowButton from "@/components/BuyNowButton";
-import { PRODUCTS, getDefaultVariant, getLowestPrice } from "@/data/products";
+import ProductCardPurchase from "@/components/ProductCardPurchase";
+import { PRODUCTS } from "@/data/products";
+import { getSettingsForDisplay } from "@/lib/prebooking/server";
 
-export default function Products() {
+export default async function Products() {
+  const preBookingSettings = await getSettingsForDisplay();
+
   return (
     <section id="products" className="px-4 pb-5 pt-11 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">
@@ -48,25 +50,11 @@ export default function Products() {
                 <p className="mt-2 flex-1 text-sm text-ink-muted">
                   {product.description}
                 </p>
-                <p className="mt-3 text-sm font-bold text-ink">
-                  From &#8377;{getLowestPrice(product)}
-                  <span className="font-normal text-ink-muted">
-                    {" "}
-                    / {getDefaultVariant(product).label}
-                  </span>
-                </p>
-                <div className="mt-4 flex flex-col gap-2">
-                  <BuyNowButton
-                    slug={product.slug}
-                    variantId={getDefaultVariant(product).id}
-                    className="w-full rounded-full bg-coral px-4 py-2.5 text-center text-sm font-bold text-white transition hover:bg-teal"
-                  />
-                  <AddToCartButton
-                    slug={product.slug}
-                    variantId={getDefaultVariant(product).id}
-                    className="w-full rounded-full border-[1.5px] border-coral px-4 py-2.5 text-center text-sm font-bold text-coral transition hover:bg-coral hover:text-white"
-                  />
-                </div>
+                <ProductCardPurchase
+                  product={product}
+                  preBookingSettings={preBookingSettings}
+                  layout="stack"
+                />
               </div>
             </article>
           ))}

@@ -22,6 +22,11 @@ export type Product = {
   images: (string | null)[];
   variants: ProductVariant[];
   amazonUrl?: string;
+  /**
+   * Sold only through the bulk pre-booking flow (src/lib/prebooking), never
+   * through the cart / retail checkout. Its price lives in the pre-booking settings.
+   */
+  preBooking?: boolean;
   /** SEO keywords for this product's detail page meta tag. */
   keywords: string[];
 };
@@ -88,6 +93,7 @@ export const PRODUCTS: Product[] = [
       "/products/prpration-dosa-rice.jpg",
     ],
     variants: RICE_VARIANTS,
+    preBooking: true,
     amazonUrl: AMAZON_URL,
     keywords: [
       "dosa rice",
@@ -118,6 +124,7 @@ export const PRODUCTS: Product[] = [
       "/products/malabar-tamarind-high-oil-content.jpg",
       "/products/malabar-tamarind-specs.jpg",
     ],
+    preBooking: true,
     amazonUrl: AMAZON_URL,
     keywords: [
       "kudam puli",
@@ -170,6 +177,10 @@ export function getVariant(
   variantId: string,
 ): ProductVariant | undefined {
   return getProductBySlug(slug)?.variants.find((v) => v.id === variantId);
+}
+
+export function isPreBookingProduct(slug: string): boolean {
+  return Boolean(getProductBySlug(slug)?.preBooking);
 }
 
 export function getDefaultVariant(product: Product): ProductVariant {

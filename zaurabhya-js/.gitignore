@@ -39,6 +39,7 @@ yarn-error.log*
 
 # lead submissions (local file-based storage, not for source control)
 /data/*.jsonl
+/data/*.sqlite*
 
 # typescript
 *.tsbuildinfo
