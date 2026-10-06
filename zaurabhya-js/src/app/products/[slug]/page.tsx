@@ -6,6 +6,7 @@ import ProductGallery from "@/components/ProductGallery";
 import ProductPurchasePanel from "@/components/ProductPurchasePanel";
 import PreBookingExperience from "@/components/prebooking/PreBookingExperience";
 import { PRODUCTS, getProductBySlug, getLowestPrice } from "@/data/products";
+import { paiseToDecimal, toMerchantListing } from "@/lib/merchant";
 import { isPrebookingProductId, toPublicConfig } from "@/lib/prebooking/config";
 import { getSettingsForDisplay } from "@/lib/prebooking/server";
 import { withSiteKeywords, SITE_URL } from "@/lib/seo";
@@ -48,29 +49,60 @@ export default async function ProductPage(
   const product = getProductBySlug(slug);
   if (!product) notFound();
 
+  const settings = await getSettingsForDisplay();
   const preBookingConfig =
     product.preBooking && isPrebookingProductId(product.slug)
-      ? toPublicConfig(await getSettingsForDisplay(), product.slug)
+      ? toPublicConfig(settings, product.slug)
       : null;
+  const listing = toMerchantListing(product, settings);
 
   const productJsonLd = {
     "@context": "https://schema.org",
     "@type": "Product",
     name: product.name,
     description: product.longDescription,
-    image: product.images.filter((src): src is string => Boolean(src)),
+    image: product.images
+      .filter((src): src is string => Boolean(src))
+      .map((src) => `${SITE_URL}${src}`),
+    sku: product.slug,
     brand: { "@type": "Brand", name: "ZAURABHYA" },
     url: `${SITE_URL}/products/${product.slug}`,
-    offers: preBookingConfig
+    offers: listing
       ? {
           "@type": "Offer",
+          url: listing.url,
           priceCurrency: "INR",
-          price: preBookingConfig.pricePerKgPaise / 100,
-          availability: "https://schema.org/PreOrder",
+          // Google Shopping wants what the smallest order costs, so this is
+          // the minimum quantity; the per-KG rate is the unit price below.
+          price: paiseToDecimal(listing.pricePaise),
+          priceSpecification: {
+            "@type": "UnitPriceSpecification",
+            priceCurrency: "INR",
+            price: paiseToDecimal(listing.pricePaise / listing.minQuantityKg),
+            referenceQuantity: { "@type": "QuantitativeValue", value: 1, unitCode: "KGM" },
+          },
+          availability: "https://schema.org/InStock",
+          itemCondition: "https://schema.org/NewCondition",
+          seller: { "@type": "Organization", name: "ZAURABHYA" },
           eligibleQuantity: {
             "@type": "QuantitativeValue",
-            minValue: preBookingConfig.minQuantityKg,
+            minValue: listing.minQuantityKg,
             unitCode: "KGM",
+          },
+          shippingDetails: {
+            "@type": "OfferShippingDetails",
+            shippingRate: {
+              "@type": "MonetaryAmount",
+              value: paiseToDecimal(listing.shippingPaise),
+              currency: "INR",
+            },
+            shippingDestination: { "@type": "DefinedRegion", addressCountry: "IN" },
+          },
+          hasMerchantReturnPolicy: {
+            "@type": "MerchantReturnPolicy",
+            applicableCountry: "IN",
+            returnPolicyCategory: "https://schema.org/MerchantReturnNotPermitted",
+            merchantReturnLink: `${SITE_URL}/return-policy`,
           },
         }
       : {
