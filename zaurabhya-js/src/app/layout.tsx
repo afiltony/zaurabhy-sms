@@ -44,9 +44,6 @@ export const metadata: Metadata = {
       "Naturally healthy, farm-fresh, high-fiber Kerala rice and Malabar tamarind, direct from our own farms.",
     images: ["/logo-zaurabhya.png"],
   },
-  icons: {
-    icon: "/logo-zaurabhya.png",
-  },
 };
 
 const organizationJsonLd = {
